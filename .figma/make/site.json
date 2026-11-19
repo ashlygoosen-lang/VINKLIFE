@@ -1,0 +1,10 @@
+{
+  "description": "Explore VINK Group’s companies, divisions, impact and careers, and connect with a diversified African-rooted group and its services.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
