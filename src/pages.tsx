@@ -19,6 +19,8 @@ import {
   useInView,
 } from "./ui";
 import { navigate } from "./router";
+import { api, ApiError, fmtDate, useAsync, type Job } from "./api";
+import { fallbackArticles } from "./fallback";
 
 export function Home() {
   const [filter, setFilter] = useState("All");
@@ -841,27 +843,11 @@ export function Impact() {
 
 export function News() {
   const [cat, setCat] = useState("All");
-  const all = [
-    [
-      "Group news",
-      "Designing ecosystems, not empires: VINK’s model for shared growth",
-      images.city,
-    ],
-    [
-      "Impact",
-      "Why accessible housing begins with understanding everyday life",
-      images.architecture,
-    ],
-    [
-      "Perspective",
-      "Five principles shaping the next generation of African fintech",
-      images.people,
-    ],
-    ["Group news", "VINK welcomes a new company to its connected portfolio", images.office],
-    ["Impact", "Inside a community partnership built to last", images.community],
-    ["Perspective", "The compounding value of patient capital", images.children],
-  ];
-  const shown = cat === "All" ? all : all.filter((a) => a[0] === cat);
+  const { data, loading } = useAsync(() => api.articles(), []);
+  const items = data && data.length ? data : fallbackArticles;
+  const featured = items.find((a) => a.featured) ?? items[0];
+  const pool = cat === "All" ? items.filter((a) => a !== featured) : items.filter((a) => a.category === cat);
+  const link = (slug: string) => (slug ? `news/${slug}` : "news");
   return (
     <Layout>
       <PageHero
@@ -875,43 +861,44 @@ export function News() {
         }
         text="Perspectives, progress and stories from across the VINK ecosystem."
       />
-      <section className="section page-shell featured-article">
-        <Photo src={images.city} alt="Modern African city" />
-        <div>
-          <span className="eyebrow">Featured insight · 8 min read</span>
-          <h2>Building businesses that strengthen the systems around them.</h2>
-          <p>
-            Why the future belongs to connected companies that create value beyond their own balance
-            sheets.
-          </p>
-          <a href="#" className="button button-dark">
-            Read the story <Icon name="arrow" size={18} />
-          </a>
-        </div>
-      </section>
+      {featured && (
+        <section className="section page-shell featured-article">
+          <Photo src={featured.imageUrl} alt={featured.title} />
+          <div>
+            <span className="eyebrow">Featured insight · {fmtDate(featured.publishedAt)}</span>
+            <h2>{featured.title}</h2>
+            <p>{featured.excerpt}</p>
+            <Link to={link(featured.slug)} className="button button-dark">
+              Read the story <Icon name="arrow" size={18} />
+            </Link>
+          </div>
+        </section>
+      )}
       <section className="section soft-section">
         <div className="page-shell">
-          <div className="filters">
+          <div className="filters" role="group" aria-label="Filter articles">
             {["All", "Group news", "Impact", "Perspective"].map((x) => (
-              <button onClick={() => setCat(x)} className={cat === x ? "active" : ""} key={x}>
+              <button onClick={() => setCat(x)} className={cat === x ? "active" : ""} aria-pressed={cat === x} key={x}>
                 {x}
               </button>
             ))}
           </div>
+          {loading && <p className="results-count">Loading articles…</p>}
           <div className="article-grid large">
-            {shown.map((a, i) => (
-              <article key={a[1]}>
-                <div className="article-image has-photo" style={photoVars(a[2])}>
-                  <span>{a[0]}</span>
+            {pool.map((a) => (
+              <article key={a.title}>
+                <div className="article-image has-photo" style={photoVars(a.imageUrl)}>
+                  <span>{a.category}</span>
                 </div>
-                <small>{`0${i + 4} Mar 2025`}</small>
-                <h3>{a[1]}</h3>
-                <a href="#" className="text-link">
+                <small>{fmtDate(a.publishedAt)}</small>
+                <h3>{a.title}</h3>
+                <Link to={link(a.slug)} className="text-link">
                   Read article <Icon name="arrow" size={17} />
-                </a>
+                </Link>
               </article>
             ))}
           </div>
+          {!loading && !pool.length && <div className="empty">No articles in this category yet.</div>}
         </div>
       </section>
       <NewsletterSection />
@@ -919,15 +906,49 @@ export function News() {
   );
 }
 
+export function ArticlePage({ slug }: { slug: string }) {
+  const { data: a, error, loading } = useAsync(() => api.article(slug), [slug]);
+  return (
+    <Layout>
+      {a ? (
+        <>
+          <PageHero eyebrow={`${a.category} · ${fmtDate(a.publishedAt)}`} title={a.title} text={a.excerpt} image={a.imageUrl} />
+          <article className="section page-shell article-body">
+            {a.body.split(/\n{2,}/).map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+            <div className="article-foot">
+              <Link to="news" className="text-link">
+                <span className="flip"><Icon name="arrow" size={17} /></span> Back to all insights
+              </Link>
+              <Link to="contact" className="button button-small">
+                Start a conversation <Icon name="arrow" size={16} />
+              </Link>
+            </div>
+          </article>
+        </>
+      ) : (
+        <section className="section page-shell empty-state">
+          <h1>{loading ? "Loading…" : error?.status === 404 ? "Article not found" : "We couldn’t load this article"}</h1>
+          {!loading && (
+            <>
+              <p>{error?.status === 404 ? "It may have been moved or unpublished." : error?.message}</p>
+              <Link to="news" className="button button-dark">
+                Browse all insights <Icon name="arrow" size={18} />
+              </Link>
+            </>
+          )}
+        </section>
+      )}
+      <NewsletterSection />
+    </Layout>
+  );
+}
+
 export function Careers() {
   const [dept, setDept] = useState("All");
-  const jobs = [
-    ["Investment Associate", "Strategy", "Johannesburg"],
-    ["Product Designer", "Technology", "Hybrid"],
-    ["Financial Analyst", "Finance", "Johannesburg"],
-    ["Partnerships Manager", "Impact", "Cape Town"],
-    ["Operations Lead", "Operations", "Johannesburg"],
-  ];
+  const { data: jobs = [], loading, error } = useAsync(() => api.jobs(), []);
+  const departments = Array.from(new Set(jobs.map((j) => j.department)));
   return (
     <Layout>
       <PageHero
@@ -992,24 +1013,27 @@ export function Careers() {
               aria-label="Filter department"
             >
               <option>All</option>
-              {["Strategy", "Technology", "Finance", "Impact", "Operations"].map((x) => (
+              {departments.map((x) => (
                 <option key={x}>{x}</option>
               ))}
             </select>
           </div>
+          {loading && <p className="results-count">Loading open roles…</p>}
+          {error && <div className="empty">We couldn’t load open roles right now. Please try again shortly, or contact us directly.</div>}
+          {!loading && !error && !jobs.length && <div className="empty">No open roles at the moment — check back soon, or introduce yourself via our contact page.</div>}
           {jobs
-            .filter((j) => dept === "All" || j[1] === dept)
+            .filter((j) => dept === "All" || j.department === dept)
             .map((j) => (
-              <article key={j[0]}>
+              <article key={j.slug}>
                 <div>
-                  <h3>{j[0]}</h3>
+                  <h3>{j.title}</h3>
                   <span>
-                    {j[1]} · {j[2]}
+                    {j.department} · {j.location} · {j.employmentType}
                   </span>
                 </div>
-                <button className="button button-outline" onClick={() => navigate("contact")}>
+                <Link to={`careers/apply/${j.slug}`} className="button button-outline">
                   View role <Icon name="arrow" size={17} />
-                </button>
+                </Link>
               </article>
             ))}
         </div>
@@ -1112,6 +1136,9 @@ export function ContactForm({
   company?: Company;
 }) {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [reference, setReference] = useState("");
+  const [formError, setFormError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [selectedCompany, setSelectedCompany] = useState(company?.name || "VINK Group");
   const isInsurance = selectedCompany === "VINK Insurance";
@@ -1119,7 +1146,7 @@ export function ContactForm({
   useEffect(() => {
     setSelectedCompany(company?.name || "VINK Group");
   }, [company?.name]);
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const next: Record<string, string> = {};
@@ -1133,7 +1160,44 @@ export function ContactForm({
       next.email = "Enter a valid email address";
     if (!fd.get("consent")) next.consent = "Please confirm that we may contact you";
     setErrors(next);
-    if (!Object.keys(next).length) setSent(true);
+    setFormError("");
+    if (Object.keys(next).length) return;
+
+    const val = (k: string) => String(fd.get(k) ?? "").trim();
+    setSending(true);
+    try {
+      const res = await api.sendEnquiry({
+        name: val("name"),
+        email: val("email"),
+        phone: val("phone"),
+        organisation: val("organisation"),
+        type: val("type"),
+        contactPreference: val("contact-preference"),
+        company: selectedCompany,
+        message: val("message"),
+        consent: true,
+        website: val("website"),
+        details: {
+          coverage: val("coverage"),
+          coverFor: val("cover-for"),
+          existingCover: val("existing-cover"),
+          currentCountry: val("current-country"),
+          destination: val("destination"),
+          service: val("immigration-service"),
+        },
+      });
+      setReference(res.reference ? res.reference.slice(0, 8).toUpperCase() : "");
+      setSent(true);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        const fields = { ...(err.fields ?? {}) };
+        if (fields.service) fields["immigration-service"] = fields.service;
+        setErrors(fields);
+        setFormError(err.message);
+      } else setFormError("Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
   return (
     <section
@@ -1153,12 +1217,16 @@ export function ContactForm({
             <div className="form-success">
               <span>✓</span>
               <h3>Message received.</h3>
-              <p>Thank you. A member of our team will be in touch shortly.</p>
+              <p>
+                Thank you. A member of our team will be in touch shortly — we’ve also sent a
+                confirmation to your email.
+              </p>
+              {reference && <p className="reference">Reference: {reference}</p>}
             </div>
           ) : (
             <form onSubmit={submit} noValidate>
               <div className="form-intro">
-                <span>ENQUIRY DETAILS</span>
+                <span>Enquiry details</span>
                 <p>Fields marked with an asterisk are required. Your information stays private.</p>
               </div>
               <div className="form-row">
@@ -1291,9 +1359,21 @@ export function ContactForm({
                 </span>
               </label>
               {errors.consent && <small className="error consent-error">{errors.consent}</small>}
+              <div className="hp" aria-hidden="true">
+                <label>
+                  Website
+                  <input name="website" tabIndex={-1} autoComplete="off" />
+                </label>
+              </div>
+              {formError && (
+                <p className="form-alert" role="alert">
+                  {formError}
+                </p>
+              )}
               <div className="form-submit">
-                <button className="button" type="submit">
-                  Send secure enquiry <Icon name="arrow" size={18} />
+                <button className="button" type="submit" disabled={sending}>
+                  {sending ? "Sending…" : "Send secure enquiry"}
+                  {!sending && <Icon name="arrow" size={18} />}
                 </button>
                 <span>
                   <Icon name="shield" size={15} /> Secure and confidential
@@ -1400,6 +1480,120 @@ export function DesignSystem() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
+
+export function ApplyPage({ slug }: { slug: string }) {
+  const { data: jobs, loading } = useAsync(() => api.jobs(), []);
+  const job: Job | undefined = jobs?.find((j) => j.slug === slug);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const val = (k: string) => String(fd.get(k) ?? "").trim();
+    const next: Record<string, string> = {};
+    ["name", "email", "phone", "coverNote"].forEach((k) => !val(k) && (next[k] = "This field is required"));
+    if (val("email") && !val("email").includes("@")) next.email = "Enter a valid email address";
+    if (!fd.get("consent")) next.consent = "Please confirm that we may contact you";
+    setErrors(next);
+    setFormError("");
+    if (Object.keys(next).length) return;
+    setSending(true);
+    try {
+      await api.apply(slug, {
+        name: val("name"), email: val("email"), phone: val("phone"),
+        linkedinUrl: val("linkedinUrl"), cvUrl: val("cvUrl"), coverNote: val("coverNote"),
+        consent: true, website: val("website"),
+      });
+      setSent(true);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setErrors(err.fields ?? {});
+        setFormError(err.message);
+      } else setFormError("Something went wrong. Please try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (!job)
+    return (
+      <Layout>
+        <section className="section page-shell empty-state">
+          <h1>{loading ? "Loading…" : "This role is no longer open"}</h1>
+          {!loading && (
+            <Link to="careers" className="button button-dark">
+              See open positions <Icon name="arrow" size={18} />
+            </Link>
+          )}
+        </section>
+      </Layout>
+    );
+
+  return (
+    <Layout>
+      <PageHero eyebrow={`${job.department} · ${job.location} · ${job.employmentType}`} title={job.title} text={job.summary} image={images.office} />
+      <section className="section page-shell apply-layout">
+        <div className="apply-about">
+          <span className="eyebrow">About the role</span>
+          {job.description.split(/\n{2,}/).map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+          <Link to="careers" className="text-link">
+            <span className="flip"><Icon name="arrow" size={17} /></span> All open positions
+          </Link>
+        </div>
+        <div className="form-card">
+          {sent ? (
+            <div className="form-success">
+              <span>✓</span>
+              <h3>Application received.</h3>
+              <p>Thank you for applying for {job.title}. We’ve sent a confirmation to your email.</p>
+            </div>
+          ) : (
+            <form onSubmit={submit} noValidate>
+              <div className="form-intro">
+                <span>Apply for this role</span>
+                <p>Fields marked with an asterisk are required.</p>
+              </div>
+              <div className="form-row">
+                <Field label="Full name *" name="name" error={errors.name} />
+                <Field label="Email address *" name="email" type="email" error={errors.email} />
+              </div>
+              <div className="form-row">
+                <Field label="Phone number *" name="phone" type="tel" error={errors.phone} />
+                <Field label="LinkedIn profile (https://…)" name="linkedinUrl" type="url" error={errors.linkedinUrl} />
+              </div>
+              <Field label="Link to your CV (https://…)" name="cvUrl" type="url" error={errors.cvUrl} />
+              <label>
+                Why are you a great fit? *
+                <textarea name="coverNote" rows={6} placeholder="Tell us about your experience and what draws you to VINK" />
+                {errors.coverNote && <small className="error">{errors.coverNote}</small>}
+              </label>
+              <label className="consent-field">
+                <input type="checkbox" name="consent" />
+                <span>I agree that VINK Group may store and use these details to assess my application.</span>
+              </label>
+              {errors.consent && <small className="error consent-error">{errors.consent}</small>}
+              <div className="hp" aria-hidden="true">
+                <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
+              </div>
+              {formError && <p className="form-alert" role="alert">{formError}</p>}
+              <div className="form-submit">
+                <button className="button" type="submit" disabled={sending}>
+                  {sending ? "Sending…" : "Submit application"}
+                  {!sending && <Icon name="arrow" size={18} />}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </section>
     </Layout>

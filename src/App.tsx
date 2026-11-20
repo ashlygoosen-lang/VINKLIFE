@@ -1,7 +1,10 @@
 import { useMemo } from "react";
 import { useRoute } from "./router";
+import { AdminPage } from "./admin";
 import {
   About,
+  ApplyPage,
+  ArticlePage,
   Careers,
   CompaniesPage,
   CompanyDetail,
@@ -24,6 +27,9 @@ export default function App() {
     if (route.startsWith("division/")) return <DivisionsPage slug={route.split("/")[1]} />;
     if (route === "impact") return <Impact />;
     if (route === "news") return <News />;
+    if (route.startsWith("news/")) return <ArticlePage slug={route.split("/")[1]} />;
+    if (route.startsWith("careers/apply/")) return <ApplyPage slug={route.split("/")[2]} />;
+    if (route === "admin") return <AdminPage />;
     if (route === "careers") return <Careers />;
     if (route === "contact") return <Contact />;
     if (route === "design-system") return <DesignSystem />;

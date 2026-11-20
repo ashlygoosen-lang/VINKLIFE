@@ -8,6 +8,8 @@ import {
 import type React from "react";
 import { companies, images, type Company } from "./data";
 import { navigate, useRoute } from "./router";
+import { api, ApiError, fmtDate, useAsync } from "./api";
+import { fallbackArticles } from "./fallback";
 
 export function Icon({ name, size = 22 }: { name: string; size?: number }) {
   const paths: Record<string, ReactNode> = {
@@ -756,13 +758,9 @@ export function CompanyCard({ company }: { company: Company }) {
   );
 }
 
-const articleList = [
-  ["Group news", "06 Mar 2025", "Designing ecosystems, not empires: VINK’s model for shared growth", images.city],
-  ["Impact", "21 Feb 2025", "Why accessible housing begins with understanding everyday life", images.architecture],
-  ["Perspective", "04 Feb 2025", "Five principles shaping the next generation of African fintech", images.people],
-];
-
 export function NewsPreview() {
+  const { data } = useAsync(() => api.articles(3), []);
+  const items = (data && data.length ? data : fallbackArticles).slice(0, 3);
   return (
     <section className="section page-shell news-preview">
       <div className="heading-row">
@@ -772,14 +770,14 @@ export function NewsPreview() {
         </Link>
       </div>
       <div className="article-grid">
-        {articleList.map((a) => (
-          <article key={a[2]}>
-            <div className="article-image has-photo" style={photoVars(a[3])}>
-              <span>{a[0]}</span>
+        {items.map((a) => (
+          <article key={a.title}>
+            <div className="article-image has-photo" style={photoVars(a.imageUrl)}>
+              <span>{a.category}</span>
             </div>
-            <small>{a[1]}</small>
-            <h3>{a[2]}</h3>
-            <Link to="news" className="text-link">
+            <small>{fmtDate(a.publishedAt)}</small>
+            <h3>{a.title}</h3>
+            <Link to={a.slug ? `news/${a.slug}` : "news"} className="text-link">
               Read article <Icon name="arrow" size={17} />
             </Link>
           </article>
@@ -840,32 +838,46 @@ export function PageHero({
 
 export function Newsletter({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
+  const [trap, setTrap] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "done">("idle");
+  const [error, setError] = useState("");
   return (
     <form
       className={`newsletter ${compact ? "compact" : ""}`}
-      onSubmit={(e) => {
+      noValidate
+      onSubmit={async (e) => {
         e.preventDefault();
-        if (email.includes("@")) setDone(true);
+        setError("");
+        if (!email.includes("@")) return setError("Enter a valid email address.");
+        setState("sending");
+        try {
+          await api.subscribe(email.trim(), trap);
+          setState("done");
+        } catch (err) {
+          setState("idle");
+          setError(err instanceof ApiError ? (err.fields?.email ?? err.message) : "Something went wrong.");
+        }
       }}
     >
-      {done ? (
-        <p className="success">
+      {state === "done" ? (
+        <p className="success" role="status">
           <Icon name="check" size={18} /> Thank you — you’re on the list.
         </p>
       ) : (
         <>
           <input
             type="email"
-            required
             placeholder="Your email address"
             aria-label="Email address"
+            aria-invalid={!!error}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button className="button" type="submit" aria-label="Subscribe">
-            {compact ? <Icon name="arrow" size={18} /> : "Subscribe"}
+          <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" name="website" value={trap} onChange={(e) => setTrap(e.target.value)} />
+          <button className="button" type="submit" aria-label="Subscribe" disabled={state === "sending"}>
+            {compact ? <Icon name="arrow" size={18} /> : state === "sending" ? "Subscribing…" : "Subscribe"}
           </button>
+          {error && <small className="newsletter-error" role="alert">{error}</small>}
         </>
       )}
     </form>
