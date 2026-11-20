@@ -70,7 +70,6 @@ export const companies: Company[] = [
     mark: "OH",
     logo: "/brand/companies/ophelp-logo.png",
     icon: "/brand/companies/ophelp-icon.png",
-    website: "https://www.ophelp.co.za",
     division: "Community",
     tagline: "Help that reaches further.",
     description: "Connecting people, partners and resources to meaningful community needs.",

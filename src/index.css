@@ -308,7 +308,9 @@ a.company-hero-logo:hover, a.company-hero-logo:focus-visible { transform: transl
   position: absolute; left: 50%; top: 50%; width: var(--size); aspect-ratio: 1; translate: -50% -50%;
   border-radius: 50%; border: 1px solid rgba(240, 213, 138, 0.26);
   animation: spin var(--duration) linear infinite; animation-direction: var(--dir);
+  pointer-events: none; /* rings overlap; only the logos themselves take clicks */
 }
+.orbit-node { pointer-events: auto; }
 .orbit-ring::before {
   content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1px dashed rgba(240, 213, 138, 0.12);
   transform: scale(1.012);
@@ -317,6 +319,7 @@ a.company-hero-logo:hover, a.company-hero-logo:focus-visible { transform: transl
 @keyframes spin { to { rotate: 360deg; } }
 .orbit-node { position: absolute; width: 0; height: 0; z-index: 1; }
 .orbit-node:hover, .orbit-node:focus-visible { z-index: 5; }
+.orbit-node b { cursor: pointer; }
 .orbit-node-inner {
   position: absolute; left: 0; top: 0; translate: -50% -50%; display: grid; place-items: center;
   animation: spin var(--duration) linear infinite; animation-direction: reverse;
@@ -345,6 +348,7 @@ a.company-hero-logo:hover, a.company-hero-logo:focus-visible { transform: transl
 .orbit-node:hover em, .orbit-node:focus-visible em { opacity: 1; transform: none; }
 .orbit-core {
   position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 38%; display: grid; place-items: center;
+  pointer-events: none; /* decorative: never block clicks on the company logos around it */
 }
 .orbit-core::before {
   content: ""; position: absolute; left: 50%; top: 50%; width: 150%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
