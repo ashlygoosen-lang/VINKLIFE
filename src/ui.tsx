@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type React from "react";
-import { companies, images, type Company } from "./data";
+import { companies, companyFilters, images, type Company } from "./data";
 import { navigate, useRoute } from "./router";
 import { api, ApiError, fmtDate, useAsync } from "./api";
 import { fallbackArticles } from "./fallback";
@@ -550,7 +550,7 @@ export function Header() {
           <div className="mega-intro">
             <span className="eyebrow">The VINK ecosystem</span>
             <h3>One group. Many possibilities.</h3>
-            <p>Eighteen companies across fifteen essential sectors, working as one.</p>
+            <p>{companies.length - 1} companies across {companyFilters.length - 1} essential sectors, working as one.</p>
             <Link to="companies" className="text-link" tabIndex={mega ? 0 : -1}>
               View company directory <Icon name="arrow" size={16} />
             </Link>

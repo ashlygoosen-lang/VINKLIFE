@@ -70,7 +70,7 @@ export function Home() {
           <div className="hero-visual">
             <Orbit />
             <p className="orbit-caption">
-              <span className="pulse-dot" /> 18 companies · 15 sectors · hover to explore
+              <span className="pulse-dot" /> {companies.length - 1} companies · {companyFilters.length - 1} sectors · hover to explore
             </p>
           </div>
         </div>
@@ -128,8 +128,8 @@ export function Home() {
           </div>
           <div className="growth-grid">
             {[
-              ["company/vink-construction", images.construction, "Construction & infrastructure", "Building places that carry ambition forward.", "Discover VINK Construction"],
-              ["company/vink-energy", images.energy, "Energy & renewables", "Powering a more resilient future.", "Discover VINK Energy"],
+              ["company/buildora-group", images.construction, "Construction & infrastructure", "Building Today. Shaping Tomorrow.", "Discover Buildora Group"],
+              ["company/voltora-energy", images.energy, "Energy & renewables", "Powering Progress. Energising Tomorrow.", "Discover Voltora Energy"],
             ].map(([to, img, label, title, cta]) => (
               <Link key={to} to={to} className="growth-card has-photo" style={photoVars(img)}>
                 <div>
@@ -339,7 +339,7 @@ export function About() {
             ["2020", "Expansion into property and financial systems."],
             ["2022", "Digital commerce and payment capabilities launch."],
             ["2023", "OpHelp formalises the group’s impact work."],
-            ["Today", "Nineteen companies, one connected ambition."],
+            ["Today", `${companies.length - 1} companies, one connected ambition.`],
           ].map((x) => (
             <div key={x[0]}>
               <strong>{x[0]}</strong>
@@ -484,11 +484,17 @@ export function CompanyDetail({ slug }: { slug: string }) {
         : company.division === "Energy"
           ? images.energy
           : images.office;
-  const services = [
-    ["spark", "Digital-first solutions"],
-    ["shield", "Reliable infrastructure"],
-    ["users", "Customer-led support"],
-    ["chart", "Insight and analytics"],
+  const profile = company.profile;
+  const services: [string, string, string][] = profile?.services ?? [
+    ["spark", "Digital-first solutions", "Practical expertise delivered with clarity, care and measurable outcomes."],
+    ["shield", "Reliable infrastructure", "Practical expertise delivered with clarity, care and measurable outcomes."],
+    ["users", "Customer-led support", "Practical expertise delivered with clarity, care and measurable outcomes."],
+    ["chart", "Insight and analytics", "Practical expertise delivered with clarity, care and measurable outcomes."],
+  ];
+  const faqs: [string, string][] = profile?.faqs ?? [
+    ["Who does this company serve?", "We work with individuals, growing businesses and strategic partners. Contact our team and we will connect you with the right specialist."],
+    ["How is the company connected to VINK?", "We are part of the VINK Group of Companies and draw on shared expertise, systems and partnerships across the group."],
+    ["How can I become a partner?", "Contact our team through the form below and we will connect you with the right person to discuss a partnership."],
   ];
   return (
     <Layout>
@@ -500,8 +506,9 @@ export function CompanyDetail({ slug }: { slug: string }) {
             <h1>{company.name}</h1>
             <h2>{company.tagline}</h2>
             <p>
-              {company.description} We combine practical insight, modern technology and the wider
-              strength of VINK to help people and businesses move forward.
+              {profile
+                ? `${company.description} ${company.name} is a member of the VINK Group of Companies.`
+                : `${company.description} We combine practical insight, modern technology and the wider strength of VINK to help people and businesses move forward.`}
             </p>
             <a href="#contact-form" className="button">
               Talk to {company.name} <Icon name="arrow" size={18} />
@@ -512,26 +519,45 @@ export function CompanyDetail({ slug }: { slug: string }) {
       </section>
       <section className="section page-shell split-story">
         <div>
-          <SectionHeading eyebrow="What we do" title="Making complex needs feel simple." />
-          <p>
-            Built around the realities of everyday life, {company.name} focuses on accessible,
-            dependable experiences. Our team pairs specialist capability with a clear understanding
-            of the people we serve.
-          </p>
-          <p>
-            As part of VINK, we draw on complementary expertise from across a diverse, connected
-            business ecosystem.
-          </p>
+          <SectionHeading
+            eyebrow={profile ? `About ${company.name}` : "What we do"}
+            title={profile ? company.tagline : "Making complex needs feel simple."}
+          />
+          {profile ? (
+            profile.about.map((para) => <p key={para.slice(0, 32)}>{para}</p>)
+          ) : (
+            <>
+              <p>
+                Built around the realities of everyday life, {company.name} focuses on accessible,
+                dependable experiences. Our team pairs specialist capability with a clear
+                understanding of the people we serve.
+              </p>
+              <p>
+                As part of VINK, we draw on complementary expertise from across a diverse, connected
+                business ecosystem.
+              </p>
+            </>
+          )}
         </div>
         <div className="key-quote">
-          <span>OUR PROMISE</span>
-          <strong>
-            Useful by design.
-            <br />
-            Human at heart.
-            <br />
-            Built to last.
-          </strong>
+          {profile ? (
+            <>
+              <span>THE NAME</span>
+              <strong>{company.name}</strong>
+              <p>{profile.meaning}</p>
+            </>
+          ) : (
+            <>
+              <span>OUR PROMISE</span>
+              <strong>
+                Useful by design.
+                <br />
+                Human at heart.
+                <br />
+                Built to last.
+              </strong>
+            </>
+          )}
         </div>
       </section>
       <section className="section soft-section">
@@ -542,10 +568,11 @@ export function CompanyDetail({ slug }: { slug: string }) {
               <article key={s[1]}>
                 <Icon name={s[0]} size={28} />
                 <h3>{s[1]}</h3>
-                <p>Practical expertise delivered with clarity, care and measurable outcomes.</p>
+                <p>{s[2]}</p>
               </article>
             ))}
           </div>
+          {profile?.disclaimer && <p className="company-disclaimer">{profile.disclaimer}</p>}
         </div>
       </section>
       <section className="stats-bar detail-stats">
@@ -594,20 +621,13 @@ export function CompanyDetail({ slug }: { slug: string }) {
           title="Good questions, clearly answered."
         />
         <div>
-          {[
-            "Who does this company serve?",
-            "How is the company connected to VINK?",
-            "How can I become a partner?",
-          ].map((q, i) => (
+          {faqs.map(([q, a], i) => (
             <details key={q} open={i === 0}>
               <summary>
                 {q}
                 <span>+</span>
               </summary>
-              <p>
-                We work with individuals, growing businesses and strategic partners. Contact our
-                team and we will connect you with the right specialist.
-              </p>
+              <p>{a}</p>
             </details>
           ))}
         </div>
@@ -658,8 +678,7 @@ export function DivisionsPage({ slug }: { slug?: string }) {
     );
   const related = companies.filter(
     (c) =>
-      c.division === selected.label ||
-      (selected.label === "E-commerce" && c.division === "Commerce"),
+      c.division === selected.label,
   );
   const divisionImage =
     selected.slug === "property"
@@ -1141,8 +1160,8 @@ export function ContactForm({
   const [formError, setFormError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [selectedCompany, setSelectedCompany] = useState(company?.name || "VINK Group");
-  const isInsurance = selectedCompany === "VINK Insurance";
-  const isImmigration = selectedCompany === "VINK Immigration Consultancy";
+  const isInsurance = selectedCompany === "SureBridge";
+  const isImmigration = selectedCompany === "GlobalPath Immigration";
   useEffect(() => {
     setSelectedCompany(company?.name || "VINK Group");
   }, [company?.name]);
@@ -1351,6 +1370,10 @@ export function ContactForm({
                 />
                 {errors.message && <small className="error">{errors.message}</small>}
               </label>
+              {(() => {
+                const notice = companies.find((c) => c.name === selectedCompany)?.profile?.disclaimer;
+                return notice ? <p className="company-disclaimer">{notice}</p> : null;
+              })()}
               <label className="consent-field">
                 <input type="checkbox" name="consent" />
                 <span>
