@@ -354,7 +354,21 @@ export function toneFor(slug: string) {
   return tones[(i < 0 ? 0 : i) % tones.length];
 }
 
-export function CompanyLogo({ company, small = false }: { company: Company; small?: boolean }) {
+export function CompanyLogo({
+  company,
+  small = false,
+  link = false,
+}: {
+  company: Company;
+  small?: boolean;
+  link?: boolean;
+}) {
+  if (link)
+    return (
+      <Link to={`company/${company.slug}`} className="crest-link" aria-label={`View ${company.name}`}>
+        <CompanyLogo company={company} small={small} />
+      </Link>
+    );
   return (
     <div
       className={`crest tone-${toneFor(company.slug)} ${small ? "small" : ""} ${company.icon ? "has-icon" : ""}`}
@@ -752,7 +766,7 @@ export function CompanyCard({ company }: { company: Company }) {
   return (
     <article className="company-card">
       <div className="company-top">
-        <CompanyLogo company={company} />
+        <CompanyLogo company={company} link />
         <span className="tag">{company.division}</span>
       </div>
       <h3>{company.name}</h3>

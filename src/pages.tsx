@@ -222,7 +222,7 @@ export function Home() {
               </div>
             </div>
             <div className="spotlight-copy" aria-live="polite">
-              <CompanyLogo company={spots[spotlight]} />
+              <CompanyLogo company={spots[spotlight]} link />
               <span className="eyebrow">{spots[spotlight].division}</span>
               <h2>{spots[spotlight].name}</h2>
               <h4>{spots[spotlight].tagline}</h4>
@@ -406,10 +406,10 @@ export function Ownership() {
       <div className="branch-line" />
       <div className="child-nodes">
         {companies.slice(1).map((c) => (
-          <div key={c.slug}>
+          <Link key={c.slug} to={`company/${c.slug}`} className="ownership-node">
             <CompanyLogo company={c} small />
             <span>{c.name}</span>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
@@ -502,9 +502,21 @@ export function CompanyDetail({ slug }: { slug: string }) {
         <div className="page-shell">
           <div>
             {company.logo ? (
-              <div className="company-hero-logo">
-                <img src={company.logo} alt={`${company.name} logo`} />
-              </div>
+              company.website ? (
+                <a
+                  className="company-hero-logo"
+                  href={company.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Visit the ${company.name} website`}
+                >
+                  <img src={company.logo} alt={`${company.name} logo — visit website`} />
+                </a>
+              ) : (
+                <div className="company-hero-logo">
+                  <img src={company.logo} alt={`${company.name} logo`} />
+                </div>
+              )
             ) : (
               <CompanyLogo company={company} />
             )}

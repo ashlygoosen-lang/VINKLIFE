@@ -23,6 +23,8 @@ export type Company = {
   logo?: string;
   /** Symbol-only version for round badges. */
   icon?: string;
+  /** The company's own website; the logo on its page links here. */
+  website?: string;
 };
 
 /*
