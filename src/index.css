@@ -651,7 +651,7 @@
 .company-hero .page-shell { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 70px; align-items: center; }
 .company-hero .crest { width: 72px; height: 72px; font-size: 24px; margin-bottom: 30px; }
 .company-hero-logo { display: inline-block; margin-bottom: 30px; padding: 18px 24px; border-radius: 18px; background: var(--ivory); box-shadow: 0 0 0 1px rgba(211, 163, 35, 0.5), 0 20px 40px -24px rgba(0, 0, 0, 0.7); }
-.company-hero-logo img { display: block; height: 96px; width: auto; max-width: 100%; }
+.company-hero-logo img { display: block; width: auto; height: auto; max-width: min(320px, 100%); max-height: 150px; }
 .company-hero h1 { margin-bottom: 10px; font-size: clamp(46px, 5.4vw, 80px); }
 .company-hero h2 { margin-bottom: 22px; font-size: 26px; font-style: italic; font-weight: 400; color: var(--gold-hi); }
 .company-hero p { max-width: 520px; color: #e0cfca; font-size: 18px; margin-bottom: 34px; }

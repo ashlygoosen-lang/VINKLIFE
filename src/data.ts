@@ -66,6 +66,8 @@ export const companies: Company[] = [
     slug: "ophelp",
     name: "OpHelp",
     mark: "OH",
+    logo: "/brand/companies/ophelp-logo.png",
+    icon: "/brand/companies/ophelp-icon.png",
     division: "Community",
     tagline: "Help that reaches further.",
     description: "Connecting people, partners and resources to meaningful community needs.",
