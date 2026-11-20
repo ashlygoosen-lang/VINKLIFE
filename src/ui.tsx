@@ -202,13 +202,15 @@ export function Icon({ name, size = 22 }: { name: string; size?: number }) {
 /* ───────── Brand ───────── */
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <img
-      className={`brand-logo ${className}`}
-      src="/brand/vink-group-logo.png"
-      alt="VINK Group — Innovation, Excellence, Global Impact"
-      width={1525}
-      height={1050}
-    />
+    <span className={`brand-logo ${className}`}>
+      <img src="/brand/vink-v-emblem.png" alt="" aria-hidden="true" width={841} height={900} />
+      <span className="brand-word">
+        <strong>
+          VINK <span>Group</span>
+        </strong>
+        <small>Innovation · Excellence · Global Impact</small>
+      </span>
+    </span>
   );
 }
 
@@ -216,11 +218,11 @@ export function Emblem({ className = "" }: { className?: string }) {
   return (
     <img
       className={`emblem ${className}`}
-      src="/brand/vink-emblem.png"
+      src="/brand/vink-v-emblem.png"
       alt=""
       aria-hidden="true"
-      width={1084}
-      height={593}
+      width={841}
+      height={900}
     />
   );
 }
