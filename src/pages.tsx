@@ -501,7 +501,13 @@ export function CompanyDetail({ slug }: { slug: string }) {
       <section className="company-hero">
         <div className="page-shell">
           <div>
-            <CompanyLogo company={company} />
+            {company.logo ? (
+              <div className="company-hero-logo">
+                <img src={company.logo} alt={`${company.name} logo`} />
+              </div>
+            ) : (
+              <CompanyLogo company={company} />
+            )}
             <span className="eyebrow gold">{company.division}</span>
             <h1>{company.name}</h1>
             <h2>{company.tagline}</h2>

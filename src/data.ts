@@ -19,6 +19,10 @@ export type Company = {
   tagline: string;
   description: string;
   profile?: CompanyProfile;
+  /** Full logo (symbol + name), transparent PNG/SVG in /public/brand/companies. */
+  logo?: string;
+  /** Symbol-only version for round badges. */
+  icon?: string;
 };
 
 /*
@@ -70,6 +74,8 @@ export const companies: Company[] = [
     slug: "affordablelife",
     name: "AffordableLife",
     mark: "AL",
+    logo: "/brand/companies/affordablelife-logo.png",
+    icon: "/brand/companies/affordablelife-icon.png",
     division: "Property",
     tagline: "A place for everyone.",
     description: "Thoughtful, attainable homes designed around real families and communities.",
