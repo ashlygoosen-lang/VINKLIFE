@@ -226,6 +226,9 @@
 }
 .crest.small { width: 42px; height: 42px; font-size: 15px; }
 .crest.small::after { inset: -3px; }
+.crest.crest.has-icon, .orbit-node .orbit-node-inner b.has-icon { background: var(--ivory); }
+.crest.has-icon img { width: 78%; height: 78%; object-fit: contain; }
+.orbit-node b.has-icon img { width: 76%; height: 76%; object-fit: contain; }
 .tone-ox { background: radial-gradient(circle at 30% 25%, #8a1620, var(--ox) 70%); }
 .tone-crimson { background: radial-gradient(circle at 30% 25%, #d11c2b, var(--crimson) 70%); }
 .tone-gold { background: radial-gradient(circle at 30% 25%, #f2d27b, #c7961d 70%); color: var(--ox-black); }
@@ -647,6 +650,8 @@
 .company-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-hi), var(--gold), transparent); }
 .company-hero .page-shell { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 70px; align-items: center; }
 .company-hero .crest { width: 72px; height: 72px; font-size: 24px; margin-bottom: 30px; }
+.company-hero-logo { display: inline-block; margin-bottom: 30px; padding: 18px 24px; border-radius: 18px; background: var(--ivory); box-shadow: 0 0 0 1px rgba(211, 163, 35, 0.5), 0 20px 40px -24px rgba(0, 0, 0, 0.7); }
+.company-hero-logo img { display: block; height: 96px; width: auto; max-width: 100%; }
 .company-hero h1 { margin-bottom: 10px; font-size: clamp(46px, 5.4vw, 80px); }
 .company-hero h2 { margin-bottom: 22px; font-size: 26px; font-style: italic; font-weight: 400; color: var(--gold-hi); }
 .company-hero p { max-width: 520px; color: #e0cfca; font-size: 18px; margin-bottom: 34px; }

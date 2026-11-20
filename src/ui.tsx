@@ -356,8 +356,11 @@ export function toneFor(slug: string) {
 
 export function CompanyLogo({ company, small = false }: { company: Company; small?: boolean }) {
   return (
-    <div className={`crest tone-${toneFor(company.slug)} ${small ? "small" : ""}`} aria-hidden="true">
-      <span>{company.mark}</span>
+    <div
+      className={`crest tone-${toneFor(company.slug)} ${small ? "small" : ""} ${company.icon ? "has-icon" : ""}`}
+      aria-hidden="true"
+    >
+      {company.icon ? <img src={company.icon} alt="" /> : <span>{company.mark}</span>}
     </div>
   );
 }
@@ -430,7 +433,9 @@ export function Orbit() {
                   aria-label={`${c.name} — ${c.division}`}
                 >
                   <span className="orbit-node-inner">
-                    <b>{c.mark}</b>
+                    <b className={c.icon ? "has-icon" : ""}>
+                      {c.icon ? <img src={c.icon} alt="" /> : c.mark}
+                    </b>
                     <em>
                       {c.name}
                       <small>{c.division}</small>
