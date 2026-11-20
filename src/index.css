@@ -164,14 +164,15 @@
 }
 .site-header.scrolled .nav-shell { height: 72px; }
 .brand-link { flex: none; display: block; }
-.brand-logo { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.brand-logo img { height: 50px; width: auto; filter: drop-shadow(0 6px 16px rgba(211, 163, 35, 0.3)); transition: height 0.35s var(--ease); }
-.brand-word { display: grid; justify-items: center; gap: 6px; text-align: center; }
-.brand-word strong { font-family: var(--font-display); font-weight: 500; font-size: 19px; line-height: 1; color: var(--ox); letter-spacing: -0.01em; white-space: nowrap; transition: font-size 0.35s var(--ease); }
+.brand-logo { display: flex; align-items: center; gap: 12px; height: 70px; transition: height 0.35s var(--ease); }
+.brand-logo img { height: 100%; width: auto; filter: drop-shadow(0 6px 16px rgba(211, 163, 35, 0.3)); }
+.brand-word { display: grid; gap: 6px; }
+.brand-word strong { font-family: var(--font-display); font-weight: 500; font-size: 30px; line-height: 1; color: var(--ox); letter-spacing: -0.02em; white-space: nowrap; transition: font-size 0.35s var(--ease); }
 .brand-word strong span { font-weight: 300; color: var(--gold); }
-.brand-word small { display: none; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
-.site-header.scrolled .brand-logo img { height: 38px; }
-.site-header.scrolled .brand-word strong { font-size: 16px; }
+.brand-word small { color: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.site-header.scrolled .brand-logo { height: 52px; }
+.site-header.scrolled .brand-word strong { font-size: 25px; }
+.site-header.scrolled .brand-word small { display: none; }
 .desktop-nav { display: flex; align-items: center; gap: 2px; margin-left: auto; }
 .nav-link {
   position: relative; display: inline-flex; align-items: center; gap: 4px; padding: 10px 14px;
@@ -615,10 +616,8 @@
 .ownership { margin-top: 56px; padding: 56px; border: 1px solid var(--line); border-radius: 24px; background: var(--stone); text-align: center; }
 .ownership .eyebrow { justify-content: center; }
 .parent-node { display: grid; place-items: center; }
-.parent-node .brand-logo { gap: 12px; }
-.parent-node .brand-logo img { height: 130px; }
-.parent-node .brand-word strong { font-size: 40px; }
-.parent-node .brand-word small { display: block; }
+.parent-node .brand-logo { height: 120px; gap: 18px; }
+.parent-node .brand-word strong { font-size: 44px; }
 .branch-line { width: 2px; height: 40px; margin: 8px auto 0; background: linear-gradient(var(--gold), transparent); }
 .child-nodes { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; padding-top: 24px; border-top: 1px solid var(--line); }
 .child-nodes > div { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 6px; border-radius: 14px; transition: background 0.3s; }
@@ -949,7 +948,7 @@
 .footer-col h4::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--f-line-strong), transparent); }
 .footer-col a { transition: color 0.25s, transform 0.35s var(--ease); }
 
-.footer-lockup { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 24px; }
+.footer-lockup { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
 .footer-lockup .emblem { width: 72px; flex: none; filter: drop-shadow(0 6px 22px rgba(211, 163, 35, 0.35)); }
 .footer-lockup strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 32px; line-height: 1; color: #fff; letter-spacing: -0.02em; }
 .footer-lockup strong span { font-weight: 300; color: var(--gold-hi); }
@@ -1019,8 +1018,9 @@
   :root { --header-h: 74px; }
   .desktop-nav, .header-cta { display: none; }
   .menu-button { display: grid; margin-left: auto; }
-  .brand-logo img { height: 40px; }
-  .brand-word strong { font-size: 16px; }
+  .brand-logo { height: 50px; gap: 10px; }
+  .brand-word strong { font-size: 24px; }
+  .brand-word small { display: none; }
   .mega-menu { display: none; }
   .mobile-nav {
     position: absolute; left: 0; right: 0; top: 100%; display: grid; gap: 4px; padding: 14px 24px 26px; background: var(--paper);
