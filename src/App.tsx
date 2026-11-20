@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useRoute } from "./router";
+import { companyRedirects, divisionRedirects } from "./data";
 import { AdminPage } from "./admin";
 import {
   About,
@@ -22,9 +23,9 @@ export default function App() {
     if (route === "home") return <Home />;
     if (route === "about") return <About />;
     if (route === "companies") return <CompaniesPage />;
-    if (route.startsWith("company/")) return <CompanyDetail slug={route.split("/")[1]} />;
+    if (route.startsWith("company/")) return <CompanyDetail slug={companyRedirects[route.split("/")[1]] ?? route.split("/")[1]} />;
     if (route === "divisions") return <DivisionsPage />;
-    if (route.startsWith("division/")) return <DivisionsPage slug={route.split("/")[1]} />;
+    if (route.startsWith("division/")) return <DivisionsPage slug={divisionRedirects[route.split("/")[1]] ?? route.split("/")[1]} />;
     if (route === "impact") return <Impact />;
     if (route === "news") return <News />;
     if (route.startsWith("news/")) return <ArticlePage slug={route.split("/")[1]} />;

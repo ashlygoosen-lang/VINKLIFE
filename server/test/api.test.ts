@@ -78,11 +78,11 @@ describe("enquiries", () => {
     assert.ok(f.email && f.phone && f.message && f.consent);
   });
   it("requires cover type for insurance and destination/service for immigration", async () => {
-    const a = await post("/api/enquiries", { ...validEnquiry, company: "VINK Insurance" });
+    const a = await post("/api/enquiries", { ...validEnquiry, company: "SureBridge" });
     assert.ok(a.json().fields.coverage);
-    const b = await post("/api/enquiries", { ...validEnquiry, company: "VINK Immigration Consultancy" });
+    const b = await post("/api/enquiries", { ...validEnquiry, company: "GlobalPath Immigration" });
     assert.ok(b.json().fields.destination && b.json().fields.service);
-    const ok = await post("/api/enquiries", { ...validEnquiry, company: "VINK Insurance", details: { coverage: "Life cover" } });
+    const ok = await post("/api/enquiries", { ...validEnquiry, company: "SureBridge", details: { coverage: "Life cover" } });
     assert.equal(ok.statusCode, 201);
   });
   it("silently discards honeypot submissions", async () => {

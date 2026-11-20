@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const companyNames = [
-  "VINK Group", "Ballylife Online", "Mansya", "OpHelp", "AffordableLife", "Siira", "Drive to Own", "Totoise", "Altegic",
-  "VINK Telecommunications", "VINK Television", "VINK News Media", "VINK Vehicle Tracking", "VINK Construction",
-  "VINK Energy", "Call My Lawyer", "Bakes Braai", "VINK Insurance", "VINK Immigration Consultancy",
+  "VINK Group", "Ballylife Online", "Mansya", "OpHelp", "AffordableLife", "TalentBridge", "OwnDrive", "Totoise", "Altegic",
+  "Connectra Telecom", "VisionWave Media", "FleetPulse", "Motora Automotive", "Buildora Group",
+  "Voltora Energy", "LexBridge", "Bakes Braai", "SureBridge", "GlobalPath Immigration",
 ] as const;
 
 export const enquiryTypes = ["General enquiry", "Partnership", "Investor relations", "Media", "Company-specific"] as const;
@@ -43,8 +43,8 @@ export const enquirySchema = z
     const need = (key: keyof typeof v.details, msg: string) => {
       if (!v.details[key]) ctx.addIssue({ code: "custom", path: ["details", key], message: msg });
     };
-    if (v.company === "VINK Insurance") need("coverage", "Select a type of cover");
-    if (v.company === "VINK Immigration Consultancy") {
+    if (v.company === "SureBridge") need("coverage", "Select a type of cover");
+    if (v.company === "GlobalPath Immigration") {
       need("destination", "Enter a destination country");
       need("service", "Select a service");
     }
