@@ -1,7 +1,15 @@
 {
-  "description": "Explore VINK Group’s companies, divisions, impact and careers, and connect with a diversified African-rooted group and its services.",
+  "title": "VINK Group | Official Website",
+  "description": "VINK Group is a diversified South African group of companies across insurance, construction, media, legal services, vehicle tracking, telecommunications, automotive, immigration, recruitment, energy and vehicle ownership.",
+  "language": "en",
   "robots": {
-    "index": false
+    "index": true
+  },
+  "icons": {
+    "icon": "/favicon.png"
+  },
+  "openGraph": {
+    "image": "/og-image.png"
   },
   "accessibility": {
     "addBypassLinks": false,

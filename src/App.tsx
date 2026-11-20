@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useRoute } from "./router";
-import { companyRedirects, divisionRedirects } from "./data";
+import { companies, companyRedirects, divisionRedirects, divisions } from "./data";
 import { AdminPage } from "./admin";
 import {
   About,
@@ -17,8 +17,39 @@ import {
   News,
 } from "./pages";
 
+const SITE = "VINK Group";
+const pageNames: Record<string, string> = {
+  about: "About Us",
+  companies: "Our Companies",
+  divisions: "Divisions",
+  impact: "Impact",
+  news: "News & Insights",
+  careers: "Careers",
+  contact: "Contact Us",
+  admin: "Admin",
+  "design-system": "Design System",
+};
+
+function titleFor(route: string) {
+  const [section, slug] = route.split("/");
+  if (section === "company") {
+    const c = companies.find((x) => x.slug === (companyRedirects[slug] ?? slug));
+    if (c) return `${c.name} | ${SITE}`;
+  }
+  if (section === "division") {
+    const d = divisions.find((x) => x.slug === (divisionRedirects[slug] ?? slug));
+    if (d) return `${d.title} | ${SITE}`;
+  }
+  if (section === "careers" && route.startsWith("careers/apply/")) return `Apply | Careers | ${SITE}`;
+  if (pageNames[section]) return `${pageNames[section]} | ${SITE}`;
+  return `${SITE} | Official Website`;
+}
+
 export default function App() {
   const route = useRoute();
+  useEffect(() => {
+    document.title = titleFor(route);
+  }, [route]);
   return useMemo(() => {
     if (route === "home") return <Home />;
     if (route === "about") return <About />;
