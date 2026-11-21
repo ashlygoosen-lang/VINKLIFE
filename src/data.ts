@@ -167,9 +167,10 @@ export const companies: Company[] = [
     slug: "altegic",
     name: "Altegic",
     mark: "A",
-    division: "Financial Systems",
-    tagline: "Strategy, engineered.",
-    description: "Enterprise technology and advisory for resilient, modern operations.",
+    division: "Software Engineering",
+    tagline: "Software, engineered.",
+    description:
+      "A software development and engineering company building web, mobile and cloud platforms for businesses and institutions.",
   },
   {
     slug: "connectra-telecom",
@@ -492,6 +493,13 @@ export const divisions = [
     label: "Transport Technology",
     icon: "card",
     text: "Digital banking, fare collection and fleet tools for the minibus-taxi industry.",
+  },
+  {
+    slug: "software-engineering",
+    title: "Software Development & Engineering",
+    label: "Software Engineering",
+    icon: "spark",
+    text: "Custom software, platforms and digital products engineered for growing organisations.",
   },
   {
     slug: "telecommunications",
