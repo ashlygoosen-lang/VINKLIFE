@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type React from "react";
-import { companies, companyFilters, images, type Company } from "./data";
+import { clusters, companies, companiesIn, companyFilters, images, type Company } from "./data";
 import { navigate, useRoute } from "./router";
 import { api, ApiError, fmtDate, useAsync } from "./api";
 import { fallbackArticles } from "./fallback";
@@ -577,14 +577,16 @@ export function Header() {
             </Link>
           </div>
           <div className="mega-grid">
-            {companies.slice(1).map((c) => (
-              <Link key={c.slug} to={`company/${c.slug}`} tabIndex={mega ? 0 : -1}>
-                <CompanyLogo company={c} small />
-                <span>
-                  <b>{c.name}</b>
-                  <small>{c.division}</small>
-                </span>
-              </Link>
+            {clusters.map((g) => (
+              <div className="mega-group" key={g.slug}>
+                <h4>{g.name}</h4>
+                {companiesIn(g).map((c) => (
+                  <Link key={c.slug} to={`company/${c.slug}`} tabIndex={mega ? 0 : -1}>
+                    <CompanyLogo company={c} small />
+                    <b>{c.name}</b>
+                  </Link>
+                ))}
+              </div>
             ))}
           </div>
         </div>
@@ -614,8 +616,6 @@ const socials = [
 ];
 
 export function Footer() {
-  const list = companies.slice(1);
-  const half = Math.ceil(list.length / 2);
   return (
     <footer className="site-footer">
       {/* Texture stack — every layer is decorative */}
@@ -656,7 +656,7 @@ export function Footer() {
                 <strong>
                   VINK <span>Group</span>
                 </strong>
-                <small>Innovation · Excellence · Global Impact</small>
+                <small>Innovation, excellence, global impact</small>
               </div>
             </div>
             <p>Building an ecosystem of essential businesses that make everyday life work better.</p>
@@ -677,8 +677,30 @@ export function Footer() {
             </div>
           </div>
 
-          <nav className="footer-col footer-links" aria-label="Explore VINK">
-            <h4>Explore</h4>
+          <nav className="footer-col footer-portfolio" aria-label="VINK companies">
+            <div className="footer-portfolio-head">
+              <h4>Our companies</h4>
+              <Link to="companies" className="footer-directory-link">
+                Company directory <Icon name="arrow" size={15} />
+              </Link>
+            </div>
+            <div className="footer-groups">
+              {clusters.map((g) => (
+                <div key={g.slug}>
+                  <h5>{g.name}</h5>
+                  {companiesIn(g).map((c) => (
+                    <Link key={c.slug} to={`company/${c.slug}`}>
+                      {c.name}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </nav>
+        </div>
+
+        <div className="footer-sub">
+          <nav className="footer-links" aria-label="Explore VINK">
             {[
               ["about", "About us"],
               ["divisions", "Divisions"],
@@ -686,47 +708,16 @@ export function Footer() {
               ["news", "Insights"],
               ["careers", "Careers"],
               ["contact", "Contact"],
-              ["design-system", "Design system"],
             ].map(([to, label]) => (
               <Link key={to} to={to}>
                 {label}
               </Link>
             ))}
           </nav>
-
-          <nav className="footer-col footer-portfolio" aria-label="VINK companies">
-            <h4>Our companies</h4>
-            <div className="footer-company-list">
-              <div>
-                {list.slice(0, half).map((c) => (
-                  <Link key={c.slug} to={`company/${c.slug}`}>
-                    {c.name}
-                  </Link>
-                ))}
-              </div>
-              <div>
-                {list.slice(half).map((c) => (
-                  <Link key={c.slug} to={`company/${c.slug}`}>
-                    {c.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link to="companies" className="footer-directory-link">
-              View company directory <Icon name="arrow" size={15} />
-            </Link>
-          </nav>
-
-          <div className="footer-col footer-news">
-            <h4>Stay informed</h4>
-            <p>Group news, useful ideas and impact — delivered thoughtfully.</p>
+          <div className="footer-news">
+            <p>Monthly group news.</p>
             <Newsletter compact />
-            <small>No spam. Unsubscribe any time.</small>
           </div>
-        </div>
-
-        <div className="footer-mark" aria-hidden="true">
-          <span>VINK</span>
         </div>
 
         <div className="footer-bottom">
@@ -762,6 +753,34 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 /* ───────── Shared blocks ───────── */
+export function PortfolioColumns() {
+  return (
+    <div className="portfolio-cols">
+      {clusters.map((g) => (
+        <section className="portfolio-col" key={g.slug} aria-labelledby={`pc-${g.slug}`}>
+          <header>
+            <h3 id={`pc-${g.slug}`}>{g.name}</h3>
+            <p>{g.text}</p>
+          </header>
+          <ul>
+            {companiesIn(g).map((c) => (
+              <li key={c.slug}>
+                <Link to={`company/${c.slug}`} className="portfolio-row">
+                  <CompanyLogo company={c} small />
+                  <span>
+                    <b>{c.name}</b>
+                    <small>{c.division}</small>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 export function CompanyCard({ company }: { company: Company }) {
   return (
     <article className="company-card">

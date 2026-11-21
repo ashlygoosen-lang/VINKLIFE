@@ -1,10 +1,11 @@
 import { FormEvent, useEffect, useState, type ReactNode } from "react";
-import { companies, companyFilters, divisions, images, type Company } from "./data";
+import { clusters, companies, companiesIn, companyFilters, divisions, images, type Company } from "./data";
 import {
   Count,
   CTA,
   CompanyCard,
   CompanyLogo,
+  PortfolioColumns,
   Icon,
   Layout,
   Link,
@@ -23,11 +24,8 @@ import { api, ApiError, fmtDate, useAsync, type Job } from "./api";
 import { fallbackArticles } from "./fallback";
 
 export function Home() {
-  const [filter, setFilter] = useState("All");
   const [spotlight, setSpotlight] = useState(0);
   const [statsRef, statsSeen] = useInView<HTMLDivElement>(0.4);
-  const visible =
-    filter === "All" ? companies.slice(1) : companies.filter((c) => c.division === filter);
   const spots = ["affordablelife", "talentbridge", "ballylife-online"].map(
     (slug) => companies.find((c) => c.slug === slug) ?? companies[1],
   );
@@ -91,32 +89,6 @@ export function Home() {
         </div>
       </section>
 
-      <section className="section page-shell">
-        <div className="heading-row">
-          <SectionHeading
-            eyebrow="Our divisions"
-            title="Built around the needs of everyday life."
-            text="Our companies work independently and together—sharing expertise, reach and a commitment to enduring value."
-          />
-          <Link to="divisions" className="text-link">
-            Explore all divisions <Icon name="arrow" size={18} />
-          </Link>
-        </div>
-        <div className="division-grid">
-          {divisions.map((d) => (
-            <Link to={`division/${d.slug}`} className="division-card" key={d.slug}>
-              <div className="icon-box">
-                <Icon name={d.icon} />
-              </div>
-              <h3>{d.title}</h3>
-              <p>{d.text}</p>
-              <span className="card-arrow">
-                <Icon name="arrow" size={20} />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       <section className="growth-platforms">
         <div className="page-shell">
@@ -150,33 +122,22 @@ export function Home() {
 
       <section className="section companies-section">
         <div className="page-shell">
-          <SectionHeading
-            eyebrow="The VINK ecosystem"
-            title="Strong companies. Shared ambition."
-            text="Explore a growing portfolio built to solve real needs and create compounding value."
-          />
-          <div className="filters" role="group" aria-label="Filter companies by division">
-            {companyFilters.map((f) => (
-              <button
-                className={filter === f ? "active" : ""}
-                aria-pressed={filter === f}
-                onClick={() => setFilter(f)}
-                key={f}
-              >
-                {f}
-              </button>
-            ))}
+          <div className="heading-row">
+            <SectionHeading
+              eyebrow="Our portfolio"
+              title="Strong companies. Shared ambition."
+              text={`${companies.length - 1} companies in five groups, each run by its own team and backed by the group.`}
+            />
+            <div className="heading-links">
+              <Link to="companies" className="text-link">
+                Company directory <Icon name="arrow" size={18} />
+              </Link>
+              <Link to="divisions" className="text-link">
+                All {companyFilters.length - 1} sectors <Icon name="arrow" size={18} />
+              </Link>
+            </div>
           </div>
-          <div className="company-grid">
-            {visible.map((c) => (
-              <CompanyCard company={c} key={c.slug} />
-            ))}
-          </div>
-          <div className="center-action">
-            <Link to="companies" className="button button-outline">
-              View full company directory <Icon name="arrow" size={18} />
-            </Link>
-          </div>
+          <PortfolioColumns />
         </div>
       </section>
 
@@ -421,11 +382,13 @@ export function Ownership() {
 export function CompaniesPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All");
-  const result = companies.filter(
-    (c) =>
-      (filter === "All" || c.division === filter) &&
-      `${c.name} ${c.description}`.toLowerCase().includes(query.toLowerCase()),
-  );
+  const matches = (c: Company) =>
+    `${c.name} ${c.division} ${c.description}`.toLowerCase().includes(query.toLowerCase());
+  const groups = clusters
+    .filter((g) => filter === "All" || g.slug === filter)
+    .map((g) => ({ group: g, items: companiesIn(g).filter(matches) }))
+    .filter((g) => g.items.length);
+  const total = groups.reduce((n, g) => n + g.items.length, 0);
   return (
     <Layout>
       <PageHero
@@ -450,24 +413,37 @@ export function CompaniesPage() {
             aria-label="Search companies"
           />
         </label>
-        <div className="filters">
-          {companyFilters.map((f) => (
-            <button className={filter === f ? "active" : ""} onClick={() => setFilter(f)} key={f}>
-              {f}
+        <div className="filters" role="group" aria-label="Filter companies by group">
+          {[["All", "All companies"], ...clusters.map((g) => [g.slug, g.name])].map(([key, label]) => (
+            <button
+              className={filter === key ? "active" : ""}
+              aria-pressed={filter === key}
+              onClick={() => setFilter(key)}
+              key={key}
+            >
+              {label}
             </button>
           ))}
         </div>
       </section>
       <section className="section page-shell directory">
         <div className="results-count">
-          <strong>{result.length}</strong> companies found
+          <strong>{total}</strong> {total === 1 ? "company" : "companies"} found
         </div>
-        <div className="company-grid">
-          {result.map((c) => (
-            <CompanyCard company={c} key={c.slug} />
-          ))}
-        </div>
-        {!result.length && (
+        {groups.map(({ group, items }) => (
+          <div className="directory-group" key={group.slug}>
+            <div className="directory-group-head">
+              <h2>{group.name}</h2>
+              <p>{group.text}</p>
+            </div>
+            <div className="company-grid">
+              {items.map((c) => (
+                <CompanyCard company={c} key={c.slug} />
+              ))}
+            </div>
+          </div>
+        ))}
+        {!total && (
           <div className="empty">No companies match your search. Try a broader term.</div>
         )}
       </section>
