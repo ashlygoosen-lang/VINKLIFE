@@ -429,6 +429,9 @@ export const companies: Company[] = [
     slug: "globalpath-immigration",
     name: "GlobalPath Immigration",
     mark: "GP",
+    logo: "/brand/companies/globalpath-logo.png",
+    icon: "/brand/companies/globalpath-icon.png",
+    website: "https://globalpath-production.up.railway.app",
     division: "Immigration Services",
     tagline: "Your Journey. Your Future. Our Guidance.",
     description:
