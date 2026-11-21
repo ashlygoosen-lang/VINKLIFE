@@ -449,6 +449,47 @@ export const companies: Company[] = [
   },
 ];
 
+/** Portfolio groups: how companies are presented in columns across the site. */
+export type Cluster = { slug: string; name: string; text: string; companies: string[] };
+export const clusters: Cluster[] = [
+  {
+    slug: "mobility",
+    name: "Mobility & Transport",
+    text: "Moving people, vehicles and fleets.",
+    companies: ["vink", "fleetpulse", "motora-automotive", "owndrive"],
+  },
+  {
+    slug: "financial",
+    name: "Financial & Insurance",
+    text: "Protecting and moving money.",
+    companies: ["surebridge", "mansya", "totoise"],
+  },
+  {
+    slug: "infrastructure",
+    name: "Infrastructure & Energy",
+    text: "Building and powering places.",
+    companies: ["buildora-group", "voltora-energy", "affordablelife"],
+  },
+  {
+    slug: "digital",
+    name: "Technology & Media",
+    text: "Connecting people and markets.",
+    companies: ["altegic", "connectra-telecom", "visionwave-media", "talentbridge", "ballylife-online"],
+  },
+  {
+    slug: "services",
+    name: "Services & Community",
+    text: "Guidance, care and hospitality.",
+    companies: ["lexbridge", "globalpath-immigration", "ophelp", "bakes-braai"],
+  },
+];
+export const companiesIn = (cluster: Cluster) =>
+  cluster.companies
+    .map((slug) => companies.find((c) => c.slug === slug))
+    .filter((c): c is Company => Boolean(c));
+export const clusterOf = (company: Company) =>
+  clusters.find((g) => g.companies.includes(company.slug));
+
 export const companyFilters = ["All", ...Array.from(new Set(companies.slice(1).map((c) => c.division)))];
 
 export const divisions = [
