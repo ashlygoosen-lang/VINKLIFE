@@ -40,13 +40,24 @@ export type Company = {
 
 export const companies: Company[] = [
   {
-    slug: "vink",
-    name: "VINK",
-    mark: "V",
+    slug: "vink-group",
+    name: "VINK Group",
+    mark: "VG",
     division: "Group",
     tagline: "Progress, connected.",
     description:
       "The strategic parent connecting capital, expertise and opportunity across the group.",
+  },
+  {
+    slug: "vink",
+    name: "VINK",
+    mark: "V",
+    division: "Transport Technology",
+    tagline: "Moving the taxi industry forward.",
+    description:
+      "Digital banking, fare collection and fleet management technology built for South Africa’s minibus-taxi industry.",
+    logo: "/brand/companies/vink-logo.png",
+    icon: "/brand/companies/vink-icon.png",
   },
   {
     slug: "ballylife-online",
@@ -474,6 +485,13 @@ export const divisions = [
     label: "Community",
     icon: "heart",
     text: "Partnership-led programmes creating lasting, measurable social progress.",
+  },
+  {
+    slug: "transport-technology",
+    title: "Transport Technology & Fintech",
+    label: "Transport Technology",
+    icon: "card",
+    text: "Digital banking, fare collection and fleet tools for the minibus-taxi industry.",
   },
   {
     slug: "telecommunications",
