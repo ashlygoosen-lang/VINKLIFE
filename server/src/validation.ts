@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const companyNames = [
-  "VINK Group", "Ballylife Online", "Mansya", "OpHelp", "AffordableLife", "TalentBridge", "OwnDrive", "Totoise", "Altegic",
+  "VINK Group", "VINK", "Ballylife Online", "Mansya", "OpHelp", "AffordableLife", "TalentBridge", "OwnDrive", "Totoise", "Altegic",
   "Connectra Telecom", "VisionWave Media", "FleetPulse", "Motora Automotive", "Buildora Group",
   "Voltora Energy", "LexBridge", "Bakes Braai", "SureBridge", "GlobalPath Immigration",
 ] as const;

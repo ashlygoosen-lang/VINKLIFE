@@ -407,7 +407,7 @@ export function SectionHeading({
 const ringPlan = [
   { size: 52, count: 5, duration: 90, offset: 0.1 },
   { size: 74, count: 6, duration: 130, offset: 0.55 },
-  { size: 96, count: 7, duration: 180, offset: 0.2 },
+  { size: 96, count: 8, duration: 180, offset: 0.2 },
 ];
 
 export function Orbit() {

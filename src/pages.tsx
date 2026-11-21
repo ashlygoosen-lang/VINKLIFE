@@ -28,7 +28,9 @@ export function Home() {
   const [statsRef, statsSeen] = useInView<HTMLDivElement>(0.4);
   const visible =
     filter === "All" ? companies.slice(1) : companies.filter((c) => c.division === filter);
-  const spots = [companies[4], companies[5], companies[1]];
+  const spots = ["affordablelife", "talentbridge", "ballylife-online"].map(
+    (slug) => companies.find((c) => c.slug === slug) ?? companies[1],
+  );
   const spotImages = [images.architecture, images.people, images.office];
   const stats: [number, string, string][] = [
     [19, "", "Companies in one ecosystem"],
