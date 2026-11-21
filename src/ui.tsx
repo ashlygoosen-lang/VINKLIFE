@@ -448,7 +448,7 @@ export function Orbit() {
                 >
                   <span className="orbit-node-inner">
                     <b className={c.icon ? "has-icon" : ""}>
-                      {c.icon ? <img src={c.icon} alt="" /> : c.mark}
+                      {c.icon ? <img src={c.iconOnDark ?? c.icon} alt="" /> : c.mark}
                     </b>
                     <em>
                       {c.name}

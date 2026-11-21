@@ -32,6 +32,8 @@ export type Company = {
   logo?: string;
   /** Symbol-only version for round badges. */
   icon?: string;
+  /** Optional light version of the icon for dark backgrounds (e.g. the homepage orbit). */
+  iconOnDark?: string;
   /** The company's own website; the logo on its page links here. */
   website?: string;
 };
@@ -102,6 +104,7 @@ export const companies: Company[] = [
     mark: "AL",
     logo: "/brand/companies/affordablelife-logo.png",
     icon: "/brand/companies/affordablelife-icon.png",
+    iconOnDark: "/brand/companies/affordablelife-icon-dark.png",
     division: "Property",
     tagline: "A place for everyone.",
     description: "Thoughtful, attainable homes designed around real families and communities.",
