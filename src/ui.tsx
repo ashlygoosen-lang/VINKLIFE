@@ -721,7 +721,7 @@ export function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} VINK Group of Companies. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} VINK Group (Pty) Ltd, registration number 2018/079316/07. All rights reserved.</span>
           <span className="footer-legal">
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
