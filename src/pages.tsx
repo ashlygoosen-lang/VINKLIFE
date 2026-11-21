@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState, type ReactNode } from "react";
-import { clusters, companies, companiesIn, companyFilters, divisions, images, type Company } from "./data";
+import { clusters, companies, companiesIn, companyFilters, divisions, headOffice, images, type Company } from "./data";
 import {
   Count,
   CTA,
@@ -1092,18 +1092,36 @@ export function Contact() {
               <div>
                 <b>Head office</b>
                 <span>
-                  Sandton, Johannesburg
+                  {headOffice.city}, {headOffice.region}
                   <br />
-                  South Africa
+                  {headOffice.country}
                 </span>
               </div>
             </article>
           </div>
-          <div className="map-placeholder">
-            <Icon name="map" size={36} />
-            <span>VINK HEAD OFFICE</span>
-            <small>Sandton · Johannesburg</small>
-          </div>
+          <figure className="office-map">
+            <iframe
+              title={`Map of the VINK Group head office in ${headOffice.city}`}
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(headOffice.mapQuery)}&z=14&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+            <figcaption>
+              <span>
+                <b>VINK Group head office</b>
+                {headOffice.city}, {headOffice.country}
+              </span>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(headOffice.mapQuery)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                Open in Google Maps <Icon name="arrow" size={16} />
+              </a>
+            </figcaption>
+          </figure>
         </div>
         <ContactForm bare />
       </section>

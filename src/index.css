@@ -746,15 +746,11 @@ a.company-hero-logo:hover, a.company-hero-logo:focus-visible { transform: transl
 .contact-cards svg { color: var(--crimson); flex: none; }
 .contact-cards b { display: block; color: var(--ox); }
 .contact-cards span { color: var(--muted); font-size: 15px; }
-.map-placeholder {
-  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 260px;
-  border-radius: 20px; color: var(--gold-hi); text-align: center; overflow: hidden; border: 1px solid rgba(240, 213, 138, 0.25);
-  background-color: var(--ox-deep);
-  background-image: linear-gradient(rgba(240, 213, 138, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(240, 213, 138, 0.1) 1px, transparent 1px), radial-gradient(60% 80% at 50% 50%, rgba(163, 13, 24, 0.5), transparent 75%);
-  background-size: 36px 36px, 36px 36px, 100% 100%;
-}
-.map-placeholder span { font-weight: 700; font-size: 14px; }
-.map-placeholder small { color: #d9c7c2; }
+.office-map { margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: var(--paper); }
+.office-map iframe { display: block; width: 100%; height: 320px; border: 0; background: var(--stone); filter: saturate(0.85) contrast(1.02); }
+.office-map figcaption { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 16px 20px; border-top: 1px solid var(--line); }
+.office-map figcaption span { color: var(--muted); font-size: 14.5px; }
+.office-map figcaption b { display: block; color: var(--ox); font-size: 15px; }
 .enquiry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .enquiry-grid article { padding: 44px; border-radius: 22px; background: var(--paper); border: 1px solid var(--line); }
 .enquiry-grid h3 { font-family: var(--font-display); font-weight: 480; font-size: 32px; color: var(--ox); }

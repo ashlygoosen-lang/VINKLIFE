@@ -35,7 +35,7 @@ const wrap = (title: string, inner: string) => `<!doctype html><html><body style
 <div style="max-width:600px;margin:0 auto;padding:32px 20px">
 <div style="background:#5a0a10;padding:22px 28px;border-radius:14px 14px 0 0;border-bottom:3px solid #d3a323"><span style="color:#f0d58a;font-size:20px;font-weight:700;letter-spacing:.5px">VINK Group</span></div>
 <div style="background:#fff;padding:28px;border-radius:0 0 14px 14px"><h2 style="margin:0 0 18px;color:#5a0a10;font-size:20px">${escapeHtml(title)}</h2>${inner}</div>
-<p style="color:#8a7b77;font-size:12px;text-align:center;margin-top:18px">VINK Group of Companies · Sandton, Johannesburg</p></div></body></html>`;
+<p style="color:#8a7b77;font-size:12px;text-align:center;margin-top:18px">VINK Group of Companies · Cape Town</p></div></body></html>`;
 
 export function rowsTable(rows: [string, string][]): string {
   return `<table style="width:100%;border-collapse:collapse;font-size:14px">${rows
