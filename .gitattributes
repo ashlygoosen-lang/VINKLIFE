@@ -148,3 +148,5 @@
 # Company logos are stored as regular files so the site deploys without LFS hydration.
 public/brand/companies/globalpath-logo.png -filter -diff -merge -text
 public/brand/companies/globalpath-icon.png -filter -diff -merge -text
+public/brand/companies/ballylife-logo.png -filter -diff -merge -text
+public/brand/companies/ballylife-icon.png -filter -diff -merge -text

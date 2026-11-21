@@ -72,6 +72,8 @@ export const companies: Company[] = [
     slug: "ballylife-online",
     name: "Ballylife Online",
     mark: "BL",
+    logo: "/brand/companies/ballylife-logo.png",
+    icon: "/brand/companies/ballylife-icon.png",
     division: "E-commerce",
     tagline: "Life, made simpler.",
     description: "A trusted digital marketplace making quality essentials easier to access.",
