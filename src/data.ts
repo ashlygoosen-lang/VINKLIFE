@@ -105,6 +105,7 @@ export const companies: Company[] = [
     logo: "/brand/companies/affordablelife-logo.png",
     icon: "/brand/companies/affordablelife-icon.png",
     iconOnDark: "/brand/companies/affordablelife-icon-dark.png",
+    website: "https://affordablelife-production.up.railway.app",
     division: "Property",
     tagline: "A place for everyone.",
     description: "Thoughtful, attainable homes designed around real families and communities.",
