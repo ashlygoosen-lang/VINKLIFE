@@ -1,3 +1,12 @@
+/** Group head office: used in the footer, contact page and map. */
+export const headOffice = {
+  city: "Cape Town",
+  region: "Western Cape",
+  country: "South Africa",
+  /** Search text for the map; replace with the full street address when confirmed. */
+  mapQuery: "Cape Town City Centre, Cape Town, South Africa",
+};
+
 export type CompanyProfile = {
   /** What the name means — shown on the company page. */
   meaning: string;

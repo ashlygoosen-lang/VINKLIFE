@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type React from "react";
-import { clusters, companies, companiesIn, companyFilters, images, type Company } from "./data";
+import { clusters, companies, companiesIn, companyFilters, headOffice, images, type Company } from "./data";
 import { navigate, useRoute } from "./router";
 import { api, ApiError, fmtDate, useAsync } from "./api";
 import { fallbackArticles } from "./fallback";
@@ -662,7 +662,7 @@ export function Footer() {
             <p>Building an ecosystem of essential businesses that make everyday life work better.</p>
             <address>
               <span>
-                <Icon name="map" size={17} /> Sandton, Johannesburg, South Africa
+                <Icon name="map" size={17} /> {headOffice.city}, {headOffice.country}
               </span>
               <a href="mailto:hello@vinkgroup.com">
                 <Icon name="mail" size={17} /> hello@vinkgroup.com
