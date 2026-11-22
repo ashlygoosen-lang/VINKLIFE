@@ -114,6 +114,9 @@ export const companies: Company[] = [
     slug: "talentbridge",
     name: "TalentBridge",
     mark: "TB",
+    logo: "/brand/companies/talentbridge-logo.png",
+    icon: "/brand/companies/talentbridge-icon.png",
+    website: "https://siila-production.up.railway.app",
     division: "Recruitment",
     tagline: "Connecting Talent to Opportunity.",
     description:
