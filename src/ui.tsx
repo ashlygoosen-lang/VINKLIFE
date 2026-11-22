@@ -1,3 +1,4 @@
+import { SplitHeading } from "./motion";
 import {
   useEffect,
   useRef,
@@ -869,7 +870,9 @@ export function PageHero({
       <Emblem className="page-hero-emblem" />
       <div className="page-shell page-hero-inner">
         <span className="eyebrow gold">{eyebrow}</span>
-        <h1>{title}</h1>
+        <h1 className="split">
+          <SplitHeading>{title}</SplitHeading>
+        </h1>
         <p>{text}</p>
       </div>
     </section>

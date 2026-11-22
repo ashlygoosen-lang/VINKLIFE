@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState, type ReactNode } from "react";
+import { SplitHeading } from "./motion";
 import { clusters, companies, companiesIn, companyFilters, divisions, headOffice, images, type Company } from "./data";
 import {
   Count,
@@ -47,12 +48,14 @@ export function Home() {
               <span className="eyebrow gold">Diverse by design · United by purpose</span>
               <span className="hero-edition">Est. 2018 · South Africa</span>
             </div>
-            <h1>
-              One Group.
-              <br />
-              Many Solutions.
-              <br />
-              <em>Building everyday life.</em>
+            <h1 className="split">
+              <SplitHeading>
+                One Group.
+                <br />
+                Many Solutions.
+                <br />
+                <em>Building everyday life.</em>
+              </SplitHeading>
             </h1>
             <p>
               A diversified African group creating accessible solutions across property, finance,

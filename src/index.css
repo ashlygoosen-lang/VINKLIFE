@@ -1164,3 +1164,147 @@ a.company-hero-logo:hover, a.company-hero-logo:focus-visible { transform: transl
 
 /* One closing call-to-action per page: hide the footer's when the page already ends with one. */
 main:has(.cta-section) + .site-footer .footer-cta { display: none; }
+
+/* ═════════════════════════════════════════════════════════════════
+   Motion system
+   One easing family, one stagger step. The intro and the home hero are
+   the signature moments; everything else reveals quietly, once.
+   ═════════════════════════════════════════════════════════════════ */
+:root { --rise: 30px; --stagger: 70ms; --intro: 0s; --ease-io: cubic-bezier(0.76, 0, 0.24, 1); }
+.has-intro { --intro: 0.9s; }
+
+/* ── First-visit intro: the gold V settles, then the curtain parts ── */
+.vk-intro { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; pointer-events: none; }
+.vk-intro-half { position: absolute; left: 0; right: 0; height: 50.5%; background: radial-gradient(80% 120% at 50% 100%, #3a0a0e, var(--ox-black) 70%); transition: transform 0.85s var(--ease-io); }
+.vk-intro-top { top: 0; }
+.vk-intro-bottom { bottom: 0; background: radial-gradient(80% 120% at 50% 0%, #3a0a0e, var(--ox-black) 70%); }
+.vk-intro-mark { position: relative; display: grid; justify-items: center; gap: 16px; animation: vkMark 0.8s var(--ease) both; }
+.vk-intro-mark img { width: 84px; height: auto; filter: drop-shadow(0 10px 30px rgba(211, 163, 35, 0.45)); }
+.vk-intro-mark span { font-family: var(--font-display); font-size: 26px; color: #fff; letter-spacing: -0.01em; }
+.vk-intro-mark i { font-style: normal; font-weight: 300; color: var(--gold); }
+.vk-intro-mark::after { content: ""; position: absolute; left: -40%; right: -40%; top: 44%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-hi), transparent); transform: scaleX(0); animation: vkLine 0.9s var(--ease) 0.2s both; }
+.vk-intro.is-leaving .vk-intro-top { transform: translateY(-100%); }
+.vk-intro.is-leaving .vk-intro-bottom { transform: translateY(100%); }
+.vk-intro.is-leaving .vk-intro-mark { opacity: 0; transform: scale(0.94); transition: opacity 0.35s, transform 0.6s var(--ease); }
+@keyframes vkMark { from { opacity: 0; transform: scale(0.86); filter: blur(8px); } }
+@keyframes vkLine { to { transform: scaleX(1); } }
+
+/* ── Route progress + page enter ── */
+.route-progress { position: fixed; inset: 0 0 auto 0; z-index: 250; height: 2px; pointer-events: none; transform-origin: 0 50%; transform: scaleX(0); opacity: 0; background: var(--gold-grad); }
+.route-progress.is-running { animation: vkBar 0.9s var(--ease) both; }
+@keyframes vkBar { 0% { opacity: 1; transform: scaleX(0); } 70% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
+.motion #main.is-running { animation: vkPage 0.75s var(--ease) both; }
+@keyframes vkPage { from { opacity: 0; transform: translateY(16px); } }
+
+/* ── Split headings rise word by word ── */
+.split .w { display: inline-block; overflow: clip; overflow-clip-margin: 0.16em; vertical-align: top; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.split .w > span { display: inline-block; animation: vkWord 1.05s var(--ease) both; animation-delay: calc(var(--intro) + 0.15s + var(--w) * 55ms); }
+@keyframes vkWord { from { transform: translateY(112%); } }
+/* gold words keep their gradient on each word, and catch one shimmer after they land */
+.split em { background: none !important; color: inherit !important; -webkit-background-clip: border-box !important; background-clip: border-box !important; }
+.split em .w > span { background: linear-gradient(110deg, #a47612 0%, #d3a323 30%, #fff3c4 46%, #d3a323 62%, #a47612 100%); background-size: 260% 100%; background-position: 100% 0; -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 0.06em; animation: vkWord 1.05s var(--ease) both, vkShimmer 1.6s ease-in-out both; animation-delay: calc(var(--intro) + 0.15s + var(--w) * 55ms), calc(var(--intro) + 1.25s + var(--w) * 90ms); }
+@keyframes vkShimmer { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+.hero-copy h1.split { animation: none; }
+
+/* ── Home hero ── */
+.hero-copy .hero-kicker { animation-delay: var(--intro); }
+.hero-copy > p { animation-delay: calc(var(--intro) + 0.6s); }
+.hero-copy .button-row { animation-delay: calc(var(--intro) + 0.75s); }
+.hero-visual { animation-delay: calc(var(--intro) + 0.25s); }
+.orbit { animation: vkOrbit 1.9s var(--ease) both; animation-delay: calc(var(--intro) + 0.3s); }
+@keyframes vkOrbit { from { opacity: 0; scale: 0.84; filter: blur(6px); } }
+.hero-photo { animation: vkSettle 2.8s var(--ease) both; animation-delay: var(--intro); }
+@keyframes vkSettle { from { scale: 1.14; opacity: 0.15; } }
+.motion .hero-photo, .motion .page-hero-image { translate: 0 calc(var(--scroll, 0) * 0.22px); }
+.motion .hero-copy { translate: 0 calc(var(--scroll, 0) * -0.08px); }
+.hero-columns { animation: vkColumns 1.8s var(--ease) both; animation-delay: calc(var(--intro) + 0.1s); }
+@keyframes vkColumns { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+.home-hero::after, .page-hero .page-hero-light {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity 0.6s;
+  background: radial-gradient(560px circle at var(--mx, 70%) var(--my, 40%), rgba(240, 213, 138, 0.12), transparent 60%);
+}
+.home-hero:hover::after { opacity: 1; }
+.stats-bar .stats-grid { animation: rise 1.1s var(--ease) both; animation-delay: calc(var(--intro) + 0.9s); }
+
+/* ── Page heroes ── */
+.page-hero-inner .eyebrow { animation: rise 0.9s var(--ease) both; }
+.page-hero-inner > p { animation: rise 0.9s var(--ease) 0.5s both; }
+.page-hero-image { animation: vkSettle 2.6s var(--ease) both; }
+.page-hero-emblem { animation: vkEmblem 2.4s var(--ease) 0.2s both; }
+@keyframes vkEmblem { from { opacity: 0; scale: 0.9; rotate: -6deg; } }
+.page-hero::after { transform-origin: 50% 50%; animation: vkLineX 1.6s var(--ease) 0.3s both; }
+@keyframes vkLineX { from { transform: scaleX(0); } }
+.eyebrow::before { transform-origin: 0 50%; }
+.motion [data-reveal].is-in .eyebrow::before, .hero-kicker .eyebrow::before, .page-hero-inner .eyebrow::before { animation: vkLineX 1.1s var(--ease) 0.15s both; transform-origin: 0 50%; }
+
+/* ── Scroll reveals (JS + motion allowed only) ── */
+.motion [data-reveal] { transition: opacity 1.1s var(--ease), translate 1.1s var(--ease), clip-path 1.3s var(--ease), scale 1.6s var(--ease); transition-delay: calc(var(--i, 0) * var(--stagger)); }
+.motion [data-reveal="up"]:not(.is-in) { opacity: 0; translate: 0 var(--rise); }
+.motion [data-reveal="image"]:not(.is-in) { clip-path: inset(14% 0 14% 0 round 20px); scale: 1.06; opacity: 0.001; }
+.motion [data-reveal="image"].is-in { clip-path: inset(0 0 0 0 round 0); }
+.motion .stats-grid > div[data-reveal] { transition-duration: 0.9s; }
+/* timeline spine draws as entries arrive */
+.motion .timeline::before { transform-origin: 50% 0; transform: scaleY(0); transition: transform 2s var(--ease) 0.2s; }
+.motion .timeline:has(> .is-in)::before, .motion .timeline:has(> [data-revealed])::before { transform: scaleY(1); }
+
+/* ── Buttons ── */
+.button { overflow: hidden; isolation: isolate; transform: translate3d(var(--tx, 0), var(--ty, 0), 0); }
+.button:hover { transform: translate3d(var(--tx, 0), calc(var(--ty, 0px) - 2px), 0); }
+.button.is-magnet { transition: transform 0.15s linear, background 0.3s, box-shadow 0.35s var(--ease), color 0.3s, border-color 0.3s; }
+.button::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%); transform: translateX(-130%); transition: transform 0.95s var(--ease); }
+.button:hover::after { transform: translateX(130%); }
+.button-outline::after, .button-ghost-light::after { background: linear-gradient(110deg, transparent 30%, rgba(240, 213, 138, 0.22) 50%, transparent 70%); }
+.button:active { transform: translate3d(var(--tx, 0), var(--ty, 0), 0) scale(0.98); }
+
+/* ── Cards: lift with a gentle 3D tilt and a gold light ── */
+.company-card, .growth-card { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+.company-card:hover { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px); }
+.growth-card:hover { transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-6px); }
+.company-card::after, .growth-card::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.45s; z-index: 0;
+  background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 0%), rgba(211, 163, 35, 0.14), transparent 65%);
+}
+.company-card:hover::after, .growth-card:hover::after { opacity: 1; }
+.values-grid svg, .division-card .icon-box { transition: transform 0.6s var(--ease), background 0.4s, color 0.4s; }
+.values-grid article:hover svg { transform: translateY(-4px) rotate(-6deg); }
+.division-card:hover .icon-box { transform: rotate(-6deg) scale(1.06); }
+.case-grid .photo, .gallery .photo, .culture-gallery .photo { transition: transform 1.2s var(--ease); }
+.case-grid article:hover .photo, .gallery > *:hover .photo, .culture-gallery > *:hover .photo { transform: scale(1.04); }
+.case-grid article, .gallery > *, .culture-gallery > * { overflow: hidden; }
+
+/* ── Navigation ── */
+.mega-menu.open .mega-group { animation: rise 0.55s var(--ease) both; }
+.mega-menu.open .mega-group:nth-child(2) { animation-delay: 40ms; } .mega-menu.open .mega-group:nth-child(3) { animation-delay: 80ms; }
+.mega-menu.open .mega-group:nth-child(4) { animation-delay: 120ms; } .mega-menu.open .mega-group:nth-child(5) { animation-delay: 160ms; }
+.mega-group a { transition: background 0.25s, padding-left 0.35s var(--ease); }
+.mega-group a:hover { padding-left: 14px; }
+.brand-logo img { transition: transform 0.6s var(--ease), filter 0.4s; }
+.brand-link:hover .brand-logo img { transform: rotate(-6deg) scale(1.04); filter: drop-shadow(0 6px 20px rgba(211, 163, 35, 0.55)); }
+
+/* ── Atmosphere: dark sections breathe slowly ── */
+.navy-section::before, .growth-platforms::before { animation: vkGlow 20s ease-in-out infinite alternate; }
+.cta-bg .emblem { animation: vkFloat 14s ease-in-out infinite alternate; }
+@keyframes vkGlow { from { transform: translate3d(-3%, -2%, 0) scale(1); } to { transform: translate3d(3%, 2%, 0) scale(1.06); } }
+@keyframes vkFloat { from { transform: translate3d(0, -10px, 0) rotate(-2deg); } to { transform: translate3d(0, 10px, 0) rotate(2deg); } }
+
+/* ── Small interactions ── */
+.filters button:active, .spot-nav button:active { transform: scale(0.97); }
+.faq-section details[open] > :not(summary) { animation: rise 0.5s var(--ease) both; }
+
+/* ── Tablets and phones: lighter, shorter, no parallax or tilt ── */
+@media (max-width: 1024px) {
+  :root { --rise: 18px; --stagger: 50ms; }
+  .motion .hero-photo, .motion .page-hero-image, .motion .hero-copy { translate: none; }
+  .home-hero::after, .navy-section::before, .growth-platforms::before, .cta-bg .emblem { animation: none; }
+  .mobile-nav.open > *, .mobile-nav[data-open="true"] > * { animation: rise 0.5s var(--ease) both; }
+}
+@media (hover: none) {
+  .company-card:hover, .growth-card:hover { transform: none; }
+}
+
+/* ── Reduced motion: everything visible, nothing moves ── */
+@media (prefers-reduced-motion: reduce) {
+  .vk-intro, .route-progress { display: none; }
+  .split em .w > span { background-position: 0 0; }
+  .button, .company-card, .growth-card { transform: none !important; }
+}

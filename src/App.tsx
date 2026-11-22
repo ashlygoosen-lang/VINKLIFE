@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useRoute } from "./router";
 import { companies, companyRedirects, divisionRedirects, divisions } from "./data";
 import { AdminPage } from "./admin";
+import { pageChanged } from "./motion";
 import {
   About,
   ApplyPage,
@@ -49,8 +50,9 @@ export default function App() {
   const route = useRoute();
   useEffect(() => {
     document.title = titleFor(route);
+    pageChanged();
   }, [route]);
-  return useMemo(() => {
+  const page = useMemo(() => {
     if (route === "home") return <Home />;
     if (route === "about") return <About />;
     if (route === "companies") return <CompaniesPage />;
@@ -67,4 +69,10 @@ export default function App() {
     if (route === "design-system") return <DesignSystem />;
     return <Home />;
   }, [route]);
+  return (
+    <>
+      <div className="route-progress" aria-hidden="true" />
+      {page}
+    </>
+  );
 }
