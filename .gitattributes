@@ -154,3 +154,5 @@ public/brand/companies/affordablelife-logo.png -filter -diff -merge -text
 public/brand/companies/affordablelife-icon.png -filter -diff -merge -text
 public/brand/companies/affordablelife-icon-dark.png -filter -diff -merge -text
 public/brand/companies/ophelp-logo.png -filter -diff -merge -text
+public/brand/companies/lexbridge-logo.png -filter -diff -merge -text
+public/brand/companies/lexbridge-icon.png -filter -diff -merge -text

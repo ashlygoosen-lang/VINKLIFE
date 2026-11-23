@@ -370,6 +370,9 @@ export const companies: Company[] = [
     slug: "lexbridge",
     name: "LexBridge",
     mark: "LB",
+    logo: "/brand/companies/lexbridge-logo.png",
+    icon: "/brand/companies/lexbridge-icon.png",
+    website: "https://lexbridge-production.up.railway.app",
     division: "Legal Services",
     tagline: "Connecting People to Legal Solutions.",
     description:
