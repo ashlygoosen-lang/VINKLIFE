@@ -194,6 +194,9 @@ export const companies: Company[] = [
     slug: "connectra-telecom",
     name: "Connectra Telecom",
     mark: "CT",
+    logo: "/brand/companies/connectra-logo.png",
+    icon: "/brand/companies/connectra-icon.png",
+    website: "https://connectra-telecom-production.up.railway.app",
     division: "Telecommunications",
     tagline: "Connecting People. Powering Possibilities.",
     description:
