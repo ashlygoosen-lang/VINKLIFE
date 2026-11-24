@@ -315,6 +315,10 @@ export const companies: Company[] = [
     slug: "buildora-group",
     name: "Buildora Group",
     mark: "BG",
+    logo: "/brand/companies/buildora-logo.png",
+    icon: "/brand/companies/buildora-icon.png",
+    iconOnDark: "/brand/companies/buildora-icon-dark.png",
+    website: "https://buildora-production.up.railway.app",
     division: "Construction",
     tagline: "Building Today. Shaping Tomorrow.",
     description:
